@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no" />
+<title>Coporo Space · Space Invaders Web</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<div class="cabinet">
+  <div class="cabinet__marquee">
+    <span class="marquee__title">CÓPORO SPACE</span>
+    <span class="marquee__subtitle">— invasores del espacio —</span>
+  </div>
+
+  <div class="screen" id="screen-container">
+
+    <!-- ============ PANTALLA DE INICIO ============ -->
+    <section class="pantalla" id="pantalla-inicio" data-pantalla-activa="true">
+      <h1 class="titulo-juego">CÓPORO<br>SPACE</h1>
+
+      <form id="form-jugador" class="panel-formulario" autocomplete="off">
+        <label for="input-nombre">Identificación de piloto</label>
+        <input id="input-nombre" name="nombre" type="text" minlength="3" maxlength="50"
+               placeholder="Nombre de usuario" required />
+
+        <fieldset class="dificultad-grupo">
+          <legend>Dificultad</legend>
+          <label><input type="radio" name="dificultad" value="facil" /> Fácil</label>
+          <label><input type="radio" name="dificultad" value="medio" checked /> Medio</label>
+          <label><input type="radio" name="dificultad" value="dificil" /> Difícil</label>
+        </fieldset>
+
+        <fieldset class="nave-grupo">
+          <legend>SELECCIONA TU NAVE</legend>
+          <div class="nave-opciones">
+            <label class="nave-opcion">
+              <input class="nave-radio" type="radio" name="nave" value="nave1" checked />
+              <span class="nave-card">
+                <img src="assets/sprites/nave1.svg" width="36" height="20" alt="" />
+                <span class="nave-nombre">Nave 1</span>
+              </span>
+            </label>
+            <label class="nave-opcion">
+              <input class="nave-radio" type="radio" name="nave" value="nave2" />
+              <span class="nave-card">
+                <img src="assets/sprites/nave2.svg" width="36" height="20" alt="" />
+                <span class="nave-nombre">Nave 2</span>
+              </span>
+            </label>
+            <label class="nave-opcion">
+              <input class="nave-radio" type="radio" name="nave" value="nave3" />
+              <span class="nave-card">
+                <img src="assets/sprites/nave3.svg" width="36" height="20" alt="" />
+                <span class="nave-nombre">Nave 3</span>
+              </span>
+            </label>
+          </div>
+        </fieldset>
+
+        <label class="opcion-sonido">
+          <input type="checkbox" id="input-sonido" checked /> Sonido activado
+        </label>
+
+        <button type="submit" class="btn-primario">INSERTAR MONEDA</button>
+      </form>
+
+      <div id="perfil-info" class="perfil-info oculto"></div>
+
+      <div class="botones-secundarios">
+        <button id="btn-ver-leaderboard" class="btn-secundario">Clasificación</button>
+        <button id="btn-ver-historial" class="btn-secundario oculto">Mi historial</button>
+      </div>
+      <p class="controles-ayuda">
+        Mover: ← → / A D / arrastrar &nbsp;·&nbsp; Disparar: Espacio / toque
+      </p>
+    </section>
+
+    <!-- ============ PANTALLA DE JUEGO ============ -->
+    <section class="pantalla oculto" id="pantalla-juego">
+      <div class="hud">
+        <div class="hud__item">PUNTOS<br><span id="hud-puntos">0</span></div>
+        <div class="hud__item">NIVEL<br><span id="hud-nivel">1</span></div>
+        <div class="hud__item">VIDAS<br><span id="hud-vidas">3</span></div>
+      </div>
+      <canvas id="canvas-juego" width="480" height="560"></canvas>
+      <div class="controles-tactiles" id="controles-tactiles">
+        <button id="btn-izquierda" class="btn-touch">◀</button>
+        <button id="btn-disparo" class="btn-touch btn-touch--disparo">●</button>
+        <button id="btn-derecha" class="btn-touch">▶</button>
+      </div>
+    </section>
+
+    <!-- ============ PANTALLA GAME OVER ============ -->
+    <section class="pantalla oculto" id="pantalla-gameover">
+      <h2 class="titulo-gameover" id="gameover-titulo">GAME OVER</h2>
+      <p class="resumen-partida" id="gameover-resumen"></p>
+      <button id="btn-jugar-de-nuevo" class="btn-primario">JUGAR DE NUEVO</button>
+      <button id="btn-volver-inicio" class="btn-secundario">Volver al inicio</button>
+    </section>
+
+    <!-- ============ PANTALLA LEADERBOARD ============ -->
+    <section class="pantalla oculto" id="pantalla-leaderboard">
+      <h2 class="titulo-seccion">TOP 10 PILOTOS</h2>
+      <table class="tabla-leaderboard">
+        <thead>
+          <tr><th>#</th><th>Piloto</th><th>Puntos</th><th>Nivel</th><th>Dif.</th></tr>
+        </thead>
+        <tbody id="leaderboard-cuerpo"></tbody>
+      </table>
+      <button id="btn-cerrar-leaderboard" class="btn-secundario">Cerrar</button>
+    </section>
+
+    <!-- ============ PANTALLA HISTORIAL ============ -->
+    <section class="pantalla oculto" id="pantalla-historial">
+      <h2 class="titulo-seccion">MI HISTORIAL</h2>
+      <table class="tabla-leaderboard">
+        <thead>
+          <tr><th>Fecha</th><th>Puntos</th><th>Nivel</th><th>Dif.</th><th>Seg.</th></tr>
+        </thead>
+        <tbody id="historial-cuerpo"></tbody>
+      </table>
+      <button id="btn-cerrar-historial" class="btn-secundario">Cerrar</button>
+    </section>
+
+  </div>
+
+  <div class="cabinet__scanlines"></div>
+</div>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
